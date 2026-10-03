@@ -5,22 +5,25 @@ import dotenv from "dotenv";
 import contactRoutes from "./routes/contactRoutes";
 import pool from "./config/db";
 
-
 dotenv.config();
 
 const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// CORS
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: [
+      "http://localhost:5173",
+      "https://uppili-portfolio.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
+// JSON middleware
 app.use(express.json());
 
 // Health check
@@ -28,6 +31,14 @@ app.get("/api/health", (_req, res) => {
   res.status(200).json({
     success: true,
     message: "Portfolio API is running",
+  });
+});
+
+// Root route
+app.get("/", (_req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Uppili Portfolio API is running",
   });
 });
 
